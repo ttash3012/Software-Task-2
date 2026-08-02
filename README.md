@@ -1,54 +1,205 @@
-# Software-Task-2
+# 🏰 The Lost Kingdom
 
-# Task 2: OOP Text-Based RPG — Mainframe Infiltrator
+## Overview
 
-## Project Overview
-This repository contains a functional, text-based Cyberpunk RPG written in Python using **Object-Oriented Programming (OOP)**. Inspired by Gregory Yob’s classic *Hunt the Wumpus*, this project remakes the vintage procedural architecture into a clean, modern OOP framework. 
+**The Lost Kingdom** is a text-based role-playing adventure game developed in **Python** using **Object-Oriented Programming (OOP)**.
 
-In this game, the player acts as a rogue hacker infiltrating a secure corporate mainframe to delete a hostile, tracking AI (The Wumpus) before their local terminal gets trace-wiped.
+Players explore a fantasy kingdom, collect items, battle enemies, and complete quests to defeat the Dark Wizard and restore peace to the kingdom.
 
-### Core Objectives Met
-* **OOP Paradigm Implementation:** Designed using inheritance, encapsulation, and clear modular structure.
-* **Industry-Standard Documentation:** Includes structured system files, data dictionaries, and engineering journals.
-* **Testing Suite Verification:** Validated code execution paths via Black Box, White Box, and Grey Box methods.
-* **Version Control Integration:** Developed using explicit Git commit workflows.
+This project was created as part of a Software Engineering assessment to demonstrate the use of Python, OOP principles, and software development practices.
 
 ---
 
-## Cyberpunk Game Architecture (OOP Suitability)
+# Purpose
 
-Procedural languages require messy, massive blocks of nested `if/else` statements to keep track of network rooms, players, and security AI positions. Moving to an **Object-Oriented** structure allows us to bundle variables and functions into clean, independent digital packages.
-
-### 1. Classes and Objects Breakdown
-* **The Environment Layer (`NetworkNode` Class):** Every virtual room in the mainframe is an object generated from this class. It contains attributes like `node_id`, `node_name`, a description, and an array linking it to neighboring nodes.
-* **The Entity Layer (`SystemEntity` Parent Class):** A master template holding baseline data common to all active entities inside the system (e.g., current location node, entity name).
-* **Inheritance in Action (`Player` & `HostileAI` Child Classes):** * The `Player` class inherits location logic from `SystemEntity` but adds its own unique attributes like an `inventory` array (to hold decryption exploits and security bypass keys).
-  * The `HostileAI` class inherits basic positions but adds specific behavioral scripts to ambush or track the player.
-
-### 2. Interactions and Methods
-Objects interact inside the environment through explicit class behaviors:
-* `move_node(target_node)`: Updates coordinates when navigating firewalls.
-* `scan_adjacent()`: Pulls data from neighboring node objects to check for latency spikes or packet leaks (the "Wumpus clues").
-* `deploy_exploit()`: Triggered when a player drops a logic-bomb script into a target node to terminate the hostile AI.
+The purpose of this project is to develop a text-based adventure game that demonstrates the use of Object-Oriented Programming in Python. The game allows players to explore different locations, interact with characters, collect items, and battle enemies while learning how software engineering concepts are used to create interactive applications.
 
 ---
 
-## Data Structures & Logic Examples
+# Features
 
-### Python Object Class Setup
-```python
-class SystemEntity:
-    """Parent template for all active digital entities in the mainframe."""
-    def __init__(self, name, node_location):
-        self.name = name
-        self.node_location = node_location  # Stores the current Node object
+- Character creation
+- Multiple locations to explore
+- Interactive story
+- Enemy battles
+- Inventory system
+- Health and damage system
+- Collectable items
+- Multiple rooms
+- Win and lose conditions
+- Save player progress (optional extension)
 
-class Player(SystemEntity):
-    """Child class inheriting from SystemEntity with inventory capabilities."""
-    def __init__(self, name, node_location):
-        super().__init__(name, node_location)
-        self.ram_slots = 100
-        self.exploit_inventory = ["Decompressor.sh"]
+---
 
-    def running_processes(self):
-        return f"Active Exploit: {self.exploit_inventory[0]}"
+# Gameplay
+
+1. Start a new game.
+2. Enter your character's name.
+3. Explore different areas of the kingdom.
+4. Find weapons, armour, and health potions.
+5. Defeat enemies to gain access to new areas.
+6. Find the Magic Key.
+7. Enter the Dark Castle.
+8. Defeat the Dark Wizard.
+9. Restore peace to the kingdom.
+
+---
+
+# Characters
+
+## Player
+The main character controlled by the user.
+
+### Attributes
+- Name
+- Health
+- Damage
+- Inventory
+- Current Location
+
+---
+
+## Dark Wizard
+The final boss of the game.
+
+### Attributes
+- Health
+- Magic Damage
+- Location
+
+---
+
+## Goblin
+
+### Attributes
+- Health
+- Damage
+
+---
+
+## Merchant
+
+### Purpose
+Sells useful items to the player.
+
+---
+
+# Items
+
+- Iron Sword
+- Wooden Shield
+- Health Potion
+- Magic Key
+- Gold Coins
+
+---
+
+# Locations
+
+- Village
+- Forest
+- Cave
+- Castle Gates
+- Dark Castle
+- Throne Room
+
+---
+
+# Object-Oriented Programming
+
+This project demonstrates several Object-Oriented Programming concepts.
+
+## Classes
+
+- Player
+- Enemy
+- Wizard
+- Merchant
+- Item
+- Weapon
+- Potion
+- Room
+- Game
+
+## Objects
+
+Examples include:
+
+- Arthur (Player)
+- Goblin (Enemy)
+- Dark Wizard (Boss)
+- Iron Sword (Weapon)
+- Health Potion (Item)
+
+## Attributes
+
+Examples include:
+
+- health
+- damage
+- inventory
+- location
+- name
+
+## Methods
+
+Examples include:
+
+- attack()
+- move()
+- heal()
+- pickUpItem()
+- useItem()
+- talk()
+- startGame()
+
+---
+
+# Software Used
+
+- Python 3
+- Visual Studio Code
+- Git
+- GitHub
+
+---
+
+# Future Improvements
+
+Possible improvements include:
+
+- Save and load game
+- More enemies
+- More quests
+- Different endings
+- Better combat system
+- Experience and leveling system
+- Sound effects
+- ASCII artwork
+
+---
+
+# Version Control
+
+This project is managed using GitHub.
+
+Example commits:
+
+- Initial project setup
+- Created Player class
+- Added Room navigation
+- Added Enemy combat
+- Added Inventory system
+- Fixed movement bug
+- Improved battle mechanics
+- Final testing and documentation
+
+---
+
+# Author
+
+Created by **Your Name**
+
+Software Engineering Assessment Project
+
+2026
