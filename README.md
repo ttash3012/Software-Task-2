@@ -198,8 +198,5 @@ Example commits:
 
 # Author
 
-Created by **Your Name**
+Created by **ATASHA SUISON**
 
-Software Engineering Assessment Project
-
-2026
