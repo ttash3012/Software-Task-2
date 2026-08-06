@@ -1,324 +1,402 @@
+# ==========================================
+# Escape the Haunted School
+# Software Engineering Assessment
+# Part 1 - Classes and Game Setup
+# ==========================================
+
 import random
 
-# -----------------------------
+# ----------------------------
 # PLAYER CLASS
-# -----------------------------
+# ----------------------------
+
 class Player:
     def __init__(self, name):
         self.name = name
         self.health = 100
-        self.attack = 20
         self.inventory = []
-        self.location = None
 
     def show_stats(self):
         print("\n========== PLAYER ==========")
-        print("Name:", self.name)
-        print("Health:", self.health)
-        print("Attack:", self.attack)
+        print(f"Name: {self.name}")
+        print(f"Health: {self.health}")
         print("Inventory:", self.inventory)
         print("============================")
 
-    def take_damage(self, damage):
-        self.health -= damage
+    def take_damage(self, amount):
+        self.health -= amount
+
         if self.health < 0:
             self.health = 0
 
+        print(f"\nYou lost {amount} health.")
+
     def heal(self):
-        if "Health Potion" in self.inventory:
-            self.inventory.remove("Health Potion")
+
+        if "First Aid Kit" in self.inventory:
+
+            self.inventory.remove("First Aid Kit")
+
             self.health += 30
+
             if self.health > 100:
                 self.health = 100
-            print("You used a Health Potion.")
+
+            print("\nYou used a First Aid Kit.")
+
         else:
-            print("You don't have a Health Potion.")
+            print("\nYou don't have a First Aid Kit.")
 
     def is_alive(self):
         return self.health > 0
 
 
-# -----------------------------
-# ENEMY CLASS
-# -----------------------------
-class Enemy:
-    def __init__(self, name, health, attack):
+# ----------------------------
+# GHOST CLASS
+# ----------------------------
+
+class Ghost:
+
+    def __init__(self, name, damage):
         self.name = name
-        self.health = health
-        self.attack = attack
-
-    def take_damage(self, damage):
-        self.health -= damage
-
-    def is_alive(self):
-        return self.health > 0
+        self.damage = damage
 
 
-# -----------------------------
+# ----------------------------
 # ROOM CLASS
-# -----------------------------
+# ----------------------------
+
 class Room:
+
     def __init__(self, name, description):
+
         self.name = name
         self.description = description
-        self.connections = {}
+
         self.item = None
-        self.enemy = None
+        self.ghost = None
+
+        self.connections = {}
 
     def connect(self, direction, room):
         self.connections[direction] = room
 
     def display(self):
-        print("\n===================================")
+
+        print("\n=================================")
         print(self.name)
-        print("-----------------------------------")
+        print("=================================")
+
         print(self.description)
 
         if self.item:
             print("\nItem Found:", self.item)
 
-        if self.enemy and self.enemy.is_alive():
-            print("Enemy:", self.enemy.name)
+        if self.ghost:
+            print("Ghost:", self.ghost.name)
 
         print("\nExits:")
+
         for direction in self.connections:
             print("-", direction)
 
-        print("===================================")
 
-
-# -----------------------------
+# ----------------------------
 # GAME CLASS
-# -----------------------------
+# ----------------------------
+
 class Game:
 
     def __init__(self):
 
         print("===================================")
-        print("      THE LOST KINGDOM")
+        print(" ESCAPE THE HAUNTED SCHOOL ")
         print("===================================")
 
-        name = input("Enter your hero's name: ")
+        player_name = input("Enter your name: ")
 
-        self.player = Player(name)
+        self.player = Player(player_name)
 
-        # Create rooms
-        self.village = Room(
-            "Village",
-            "A peaceful village surrounded by mountains."
+        # ------------------------
+        # Create Rooms
+        # ------------------------
+
+        self.classroom = Room(
+            "Classroom",
+            "You wake up alone inside an empty classroom."
         )
 
-        self.forest = Room(
-            "Forest",
-            "A dark forest filled with dangerous creatures."
+        self.hallway = Room(
+            "Hallway",
+            "The hallway is dark and strangely quiet."
         )
 
-        self.cave = Room(
-            "Crystal Cave",
-            "A cave containing ancient treasures."
+        self.library = Room(
+            "Library",
+            "Rows of dusty books cover the shelves."
         )
 
-        self.castle = Room(
-            "Dark Castle",
-            "The Dark Wizard lives here."
+        self.science_lab = Room(
+            "Science Lab",
+            "Broken beakers are scattered everywhere."
         )
 
-        # Connect rooms
-        self.village.connect("north", self.forest)
+        self.principal_office = Room(
+            "Principal's Office",
+            "This room might contain the Master Key..."
+        )
 
-        self.forest.connect("south", self.village)
-        self.forest.connect("east", self.cave)
+        self.exit = Room(
+            "School Exit",
+            "The front doors are locked."
+        )
 
-        self.cave.connect("west", self.forest)
-        self.cave.connect("north", self.castle)
+        # ------------------------
+        # Connect Rooms
+        # ------------------------
 
-        self.castle.connect("south", self.cave)
+        self.classroom.connect("east", self.hallway)
 
-        # Items
-        self.forest.item = "Iron Sword"
-        self.cave.item = "Magic Key"
+        self.hallway.connect("west", self.classroom)
+        self.hallway.connect("north", self.library)
+        self.hallway.connect("south", self.science_lab)
+        self.hallway.connect("east", self.principal_office)
 
-        # Enemies
-        self.forest.enemy = Enemy("Goblin", 40, 10)
-        self.castle.enemy = Enemy("Dark Wizard", 100, 20)
+        self.library.connect("south", self.hallway)
 
-        self.player.location = self.village
+        self.science_lab.connect("north", self.hallway)
 
-    # -----------------------
-    # GAME LOOP
-    # -----------------------
+        self.principal_office.connect("west", self.hallway)
+        self.principal_office.connect("east", self.exit)
 
-    def start(self):
+        self.exit.connect("west", self.principal_office)
 
-        print("\nWelcome,", self.player.name)
+        # ------------------------
+        # Place Items
+        # ------------------------
 
-        while self.player.is_alive():
+        self.library.item = "Flashlight"
 
-            room = self.player.location
+        self.science_lab.item = "First Aid Kit"
 
-            room.display()
+        self.principal_office.item = "Master Key"
 
-            print("\nCommands")
-            print("move")
-            print("take")
-            print("heal")
-            print("stats")
-            print("quit")
+        # ------------------------
+        # Place Ghosts
+        # ------------------------
 
-            command = input("\n> ").lower()
+        self.library.ghost = Ghost(
+            "Library Ghost",
+            15
+        )
 
-            if command == "stats":
-                self.player.show_stats()
+        self.science_lab.ghost = Ghost(
+            "Science Ghost",
+            20
+        )
 
-            elif command == "heal":
-                self.player.heal()
+        # Starting Room
 
-            elif command == "take":
+        self.player_location = self.classroom
 
-                if room.item:
-                    print("You picked up", room.item)
-                    self.player.inventory.append(room.item)
+        # ----------------------------
+    # SHOW HELP
+    # ----------------------------
 
-                    if room.item == "Iron Sword":
-                        self.player.attack = 35
+    def show_help(self):
 
-                    room.item = None
+        print("\n========== COMMANDS ==========")
+        print("move       - Move to another room")
+        print("search     - Search the room")
+        print("inventory  - View inventory")
+        print("heal       - Use a First Aid Kit")
+        print("stats      - View player stats")
+        print("help       - Show commands")
+        print("quit       - Quit game")
+        print("==============================")
 
-                else:
-                    print("Nothing to take.")
+    # ----------------------------
+    # GHOST ENCOUNTER
+    # ----------------------------
 
-            elif command == "move":
+    def ghost_attack(self):
 
-                direction = input("Direction: ").lower()
+        room = self.player_location
 
-                if direction in room.connections:
+        if room.ghost:
 
-                    self.player.location = room.connections[direction]
+            print(f"\n👻 {room.ghost.name} appears!")
 
-                    if self.player.location.enemy:
-                        self.battle(self.player.location.enemy)
+            damage = random.randint(
+                room.ghost.damage - 5,
+                room.ghost.damage + 5
+            )
 
-                else:
-                    print("You can't go that way.")
+            self.player.take_damage(damage)
 
-            elif command == "quit":
-                print("Goodbye!")
-                break
+            if self.player.is_alive():
+
+                print("The ghost disappears into the darkness...")
+
+                room.ghost = None
 
             else:
-                print("Invalid command.")
 
-        print("\nGame Over")
-
-
-# -----------------------------
-# START GAME
-# -----------------------------
-
-game = Game()
-game.start()
-
-    # -----------------------
-    # BATTLE SYSTEM
-    # -----------------------
-
-    def battle(self, enemy):
-
-        print(f"\n⚔ A {enemy.name} appears!")
-
-        while enemy.is_alive() and self.player.is_alive():
-
-            print("\n======================")
-            print(f"{self.player.name}: {self.player.health} HP")
-            print(f"{enemy.name}: {enemy.health} HP")
-            print("======================")
-
-            print("\nChoose an action:")
-            print("1 - Attack")
-            print("2 - Heal")
-            print("3 - Run")
-
-            choice = input("> ")
-
-            if choice == "1":
-
-                damage = random.randint(
-                    self.player.attack - 5,
-                    self.player.attack + 5
-                )
-
-                enemy.take_damage(damage)
-
-                print(f"\nYou hit the {enemy.name} for {damage} damage!")
-
-                if enemy.is_alive():
-
-                    enemy_damage = random.randint(
-                        enemy.attack - 3,
-                        enemy.attack + 3
-                    )
-
-                    self.player.take_damage(enemy_damage)
-
-                    print(f"The {enemy.name} hits you for {enemy_damage} damage!")
-
-            elif choice == "2":
-
-                self.player.heal()
-
-                if enemy.is_alive():
-
-                    enemy_damage = random.randint(
-                        enemy.attack - 3,
-                        enemy.attack + 3
-                    )
-
-                    self.player.take_damage(enemy_damage)
-
-                    print(f"The {enemy.name} attacks while you heal!")
-
-            elif choice == "3":
-
-                if enemy.name == "Dark Wizard":
-                    print("You cannot escape the final battle!")
-
-                else:
-                    print("You escaped safely.")
-                    return
-
-            else:
-                print("Invalid choice.")
-
-        # Enemy defeated
-
-        if self.player.is_alive():
-
-            print(f"\n✓ You defeated the {enemy.name}!")
-
-            if enemy.name == "Goblin":
-
-                print("The Goblin dropped a Health Potion!")
-
-                self.player.inventory.append("Health Potion")
-
-            elif enemy.name == "Dark Wizard":
-
-                print("\n===============================")
-                print("🏆 CONGRATULATIONS!")
-                print("===============================")
-                print("You defeated the Dark Wizard!")
-                print("Peace has returned to")
-                print("The Lost Kingdom!")
-                print("===============================")
-
+                print("\nThe ghost has defeated you...")
+                print("GAME OVER")
                 quit()
+
+    # ----------------------------
+    # SEARCH ROOM
+    # ----------------------------
+
+    def search_room(self):
+
+        room = self.player_location
+
+        if room.item:
+
+            print(f"\nYou found a {room.item}!")
+
+            self.player.inventory.append(room.item)
+
+            room.item = None
 
         else:
 
-            print("\n===============================")
-            print("☠ GAME OVER")
-            print("===============================")
-            print("The Dark Wizard has won...")
-            print("===============================")
+            print("\nThere is nothing useful here.")
 
-            quit()
+    # ----------------------------
+    # MOVE PLAYER
+    # ----------------------------
+
+    def move_player(self):
+
+        room = self.player_location
+
+        direction = input("\nDirection: ").lower()
+
+        if direction in room.connections:
+
+            self.player_location = room.connections[direction]
+
+            self.ghost_attack()
+
+        else:
+
+            print("\nYou can't go that way.")
+
+    # ----------------------------
+    # GAME LOOP
+    # ----------------------------
+
+    def play(self):
+
+        print("\nWelcome to Escape the Haunted School!")
+        print("Type 'help' to see the commands.")
+
+        while self.player.is_alive():
+
+            room = self.player_location
+
+            room.display()
+
+            command = input("\n> ").lower()
+
+            if command == "help":
+
+                self.show_help()
+
+            elif command == "move":
+
+                self.move_player()
+
+            if self.check_win():
+        break
+            
+            elif command == "search":
+
+                self.search_room()
+
+            elif command == "inventory":
+
+                print("\nInventory:")
+
+                if len(self.player.inventory) == 0:
+
+                    print("Empty")
+
+                else:
+
+                    for item in self.player.inventory:
+
+                        print("-", item)
+
+            elif command == "heal":
+
+                self.player.heal()
+
+            elif command == "stats":
+
+                self.player.show_stats()
+
+            elif command == "quit":
+
+                print("\nThanks for playing!")
+                break
+
+            else:
+
+                print("\nInvalid command.")
+
+        # ----------------------------
+    # CHECK IF PLAYER HAS WON
+    # ----------------------------
+
+    def check_win(self):
+
+        # Player reaches the exit
+        if self.player_location == self.exit:
+
+            # Check if they have the Master Key
+            if "Master Key" in self.player.inventory:
+
+                print("\n======================================")
+                print("🎉 CONGRATULATIONS!")
+                print("======================================")
+                print("You unlocked the front doors.")
+                print("You escaped the Haunted School!")
+                print("You survived the night!")
+                print("======================================")
+
+                return True
+
+            else:
+
+                print("\n🚪 The doors are locked!")
+                print("You need to find the Master Key.")
+
+                # Move player back into the Principal's Office
+                self.player_location = self.principal_office
+
+        return False
+
+# ==========================================
+# START THE GAME
+# ==========================================
+
+print("\n======================================")
+print("      ESCAPE THE HAUNTED SCHOOL")
+print("======================================")
+print("You wake up alone inside your school.")
+print("Something doesn't feel right...")
+print("Find the Master Key and escape!")
+print("Be careful... ghosts are watching.")
+print("======================================")
+
+game = Game()
+game.play()
+
+print("\n======================================")
+print("Thank you for playing!")
+print("======================================")
